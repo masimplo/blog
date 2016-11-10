@@ -3,10 +3,7 @@ layout: post
 title: Practical CSS3 tables with rounded corners - RedTeamDesign
 date: '2012-01-05 13:37:39'
 tags:
-- internet
-- html
-- web-design
-- css
+- design
 ---
 
 
