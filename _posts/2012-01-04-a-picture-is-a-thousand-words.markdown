@@ -2,6 +2,7 @@
 layout: post
 title: A picture is a thousand words. GreenShot
 date: '2012-01-04 12:19:32'
+description: A free screenshot tool optimized for productivity
 tags:
 - applications
 ---

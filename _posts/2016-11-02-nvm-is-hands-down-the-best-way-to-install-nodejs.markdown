@@ -1,6 +1,7 @@
 ---
 layout: post
 title: NVM is hands down the best way to install nodejs
+description: Use NVM to manage you nodejs installation and switch between different versions like a boss
 date: '2016-11-02 10:15:04'
 ---
 
