@@ -4,7 +4,7 @@ baseurl: /
 name: masimplo's blog
 paginate: 25
 paginate_path: "/posts/page/:num/"
-url: # add site url http://example.com/
+url: / # add site url http://example.com/
 blog_theme: light # Or use dark
 
 # Optional settings
