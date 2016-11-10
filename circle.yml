@@ -1,4 +1,7 @@
 machine:
+  environment:
+    USER_NAME: masimplo
+    USER_EMAIL: m.asimakopoulos@gmail.com
   ruby:
     version: 2.3.1
 
@@ -9,4 +12,10 @@ dependencies:
 test:
   post:
     - bundle exec jekyll build
-    - bundle exec htmlproofer ./_site --only-4xx --allow-hash-href --assume-extension --check-opengraph --url-ignore "feed.xml"
+    - bundle exec htmlproofer ./_site --only-4xx --allow-hash-href
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - ./bin/automated
