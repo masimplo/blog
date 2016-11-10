@@ -3,9 +3,7 @@ layout: post
 title: Entity Framework Proxy GetType() mess
 date: '2011-07-06 23:58:00'
 tags:
-- net
-- entity-framework
-- c
+- dotnet
 ---
 
 
@@ -20,7 +18,7 @@ tags:
 Μετά από αρκετό ψάξιμο, μιας και searches του στυλ: *“dynamic proxies gettype originating type” *γελούσαν στα μούτρα μου,βρήκα ένα γλυκύτατο [static method](http://msdn.microsoft.com/en-us/library/system.data.objects.objectcontext.getobjecttype.aspx) μέσα στο ObjectContext που έδεινε τον Entity Type για Dynamic proxy entities αλλά δεν παραπονιόταν και στα POCO, οπότε ήταν ότι χρειαζόμουν για να κάνω το προβληματικό chunk exception free (τουλάχιστον του συγκεκριμένου :P).
 ```
 public static bool IsProxy(object type) {     
-   return type != null && ObjectContext.GetObjectType(type.GetType()) != type.GetType(); 
+   return type != null && ObjectContext.GetObjectType(type.GetType()) != type.GetType();
 }
 ```
 

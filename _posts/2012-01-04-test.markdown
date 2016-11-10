@@ -3,11 +3,7 @@ layout: post
 title: A picture is a thousand words. GreenShot
 date: '2012-01-04 12:19:32'
 tags:
-- greenshot
-- open-source
-- capture
-- snagit
-- screenshot
+- applications
 ---
 
 

@@ -3,13 +3,12 @@ layout: post
 title: Welcome to Ghost
 date: '2016-09-21 17:24:06'
 tags:
-- ghost-tag
 - docker
 - nodejs
 ---
 
 ## Getting Started... again
-After such a long time that I have completely abandoned by blog, I decided I needed a fresh start, something to intrigue me to get on the blogging wagon again. It had to be more than looking for a new theme or adding a few cool plugins to Wordpress. So I looked around on what was available 4 years later - *yes, that's how long I had abandon my previous attempt for a blog* - and I came upon [**Ghost**](https://ghost.org/). 
+After such a long time that I have completely abandoned by blog, I decided I needed a fresh start, something to intrigue me to get on the blogging wagon again. It had to be more than looking for a new theme or adding a few cool plugins to Wordpress. So I looked around on what was available 4 years later - *yes, that's how long I had abandon my previous attempt for a blog* - and I came upon [**Ghost**](https://ghost.org/).
 
 Ghost is a minimal blogging platform written in [**nodejs**](https://nodejs.org) - *my favorite backend engine lately* - and thought to give it a try. There are no plugins, no huge sea of themes, not much to configure, you just get up and write. It seemed like the right way for me to get back in the game, without finding excuses to play around with my blogging software rather than actually blogging.
 
