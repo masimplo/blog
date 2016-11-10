@@ -13,6 +13,6 @@ tags:
 
 Προσεγμένο και εύκολο το app προσφέροντας έλεγχο σε comments, posts, pages αλλά και wordpress.com stats.  Για την ακρίβεια από αυτό γράφω αυτό το post 2 λεπτά μετά την εγκατάσταση του.
 
-[![](https://res.cloudinary.com/dhi3dnnhc/image/upload/v1474488355/wordpress_qrcode_urekwe.png "wordpress_qrcode")](http://www.maddev.gr/wp-content/uploads/2011/07/wordpress_qrcode.png)
+![wordpress_qrcode](https://res.cloudinary.com/dhi3dnnhc/image/upload/v1474488355/wordpress_qrcode_urekwe.png)
 
 
