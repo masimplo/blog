@@ -1,4 +1,0 @@
----
-slug: nodejs
-name: NodeJS
----

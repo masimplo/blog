@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>masimplo's blog | Running Ghost inside docker behind nginx</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Running Ghost inside docker behind nginx">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/posts/running-ghost-inside-docker-behind-nginx">
+  <meta property="og:description" content="">
+  <meta property="og:site_name" content="masimplo's blog">
+  <meta property="og:image" content="/assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="/posts/running-ghost-inside-docker-behind-nginx">
+  <meta name="twitter:title" content="Running Ghost inside docker behind nginx">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="/assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="/feed.xml" type="application/rss+xml" rel="alternate" title="masimplo's blog Last 10 blog posts" />
+
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="" class="header-logo" title="masimplo's blog">masimplo's blog</a>
+  <ul class="header-links">
+    
+      <li>
+        <a href="https://twitter.com/masimplo" target="_blank" title="Twitter">
+          <span class="icon icon-social-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="https://github.com/masimplo" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="https://www.linkedin.com/in/masimplo" target="_blank" title="LinkedIn">
+          <span class="icon icon-social-linkedin"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="mailto:masimplo@gmail.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>Running Ghost inside docker behind nginx</h1>
+            <p></p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                September 25, 2016
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  4 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/devops">devops</a>
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <h2 id="lets-get-us-some-segregation">Let’s get us some segregation</h2>
+<p>So you want to run Ghost inside docker so you don’t have to mess around with your perfectly running server and you want to segregate ghost from the rest of the services on the same server and all these other goodies that docker gives you out of the box.</p>
+
+<p>Well let me stop you there. Ghost is actually not a great example for something that runs in docker, because it is as simple as hosting a hello world nodejs server, so there isn’t much to it, but it might prove useful to someone starting out with docker.</p>
+
+<p>Ghost is a single nodejs process serving dynamically generated pages with data fetched from a simple SQLite db rather than a bulky mySQL or similar. And that is the beauty of it, you really don’t need much to serve some formatted text and a few images. And that is part of why Ghost is so fast, orders of magnitude faster than its competition. It does things simply, without trying to be a silver bullet solution, it has a niche audience, but probably a very satisfied one.</p>
+
+<p>But why am I telling you that? Well, doing something small but doing it great is the new kid in the block. This is a big part of the nodejs philosophy, having <a href="https://github.com/parro-it/awesome-micro-npm-packages">micro modules</a>, with small focus that they do one thing awesomely. Nodejs is great for IO performance, but not so great for other thinks like caching, compressing, proxying etc. Don’t get me wrong you can do all that with node, point is you probably shouldn’t. That’s why we have nginx. Placing an nginx proxy in front of you node server app is a win-win situation. You are offloading tasks from you project, so you don’t have to worry about them, and you delegate them to someone that is really really good at doing them. Everyone should be happy :D</p>
+
+<h1 id="docker-compose">docker compose</h1>
+<p>Best way to get two or more containers running together is docker compose. You write a yaml file - <em>not really crazy about yaml but what are you gonna do?</em> - that describes your services - <em>also storage, network etc if you need to</em> - and their correlation, you run a single command and everything is up and running.
+Let’s take a look at how a yaml for a Ghost blog behind an nginx would look.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>version: '2'
+
+services:
+  proxy:
+    build: ./proxy
+    restart: always
+    links:
+      - maddev-web:maddev
+    ports:
+      - "80:80"
+      - "443:443"
+
+  maddev-web:
+    image: ghost
+    restart: always
+    volumes:
+      - ./web/ghost:/var/lib/ghost
+    ports:
+      - "2368"
+</code></pre>
+</div>
+<p>As you probably guessed I am using v2 of docker-compose.yml format which apart from declaring the version and grouping the two definitions under a <code class="highlighter-rouge">services</code> key, there isn’t any difference from a v1 format.</p>
+
+<p>So we first declare a proxy service, that will use a customised nginx build (more on this later), we link it to the ghost service we define below (maddev-web) and we bind ports 80 and 443 to the host. Port 443 is not going to do anything yet, I will write up how we are going to set SSL in another post, so you can just as well omit it.</p>
+
+<p>Then we declare our Ghost blog service, which uses the official ghost image from docker hub. We declare a volume binding whatever is in subdirectory <code class="highlighter-rouge">web/ghost</code> to be mounted as <code class="highlighter-rouge">/var/lib/ghost</code>. Cool thing with volumes is, that if that local directory is empty, contents of the image will be placed there so in essence bringing in all of ghost’s files. When you edit them though, next time you start the container, your local files will take precedence over the image’s.</p>
+
+<p>Notice that we are not binding the Ghost port (2368) to the host, instead we are <em>exposing</em> it so that it can be accessed by linked containers that will hit <code class="highlighter-rouge">container-ip:exposed-port</code> and since we know the port and the container ip can be retrieved by using the link alias - <em>an entry in <code class="highlighter-rouge">/etc/hosts</code> has been automatically added due the linking resolving the alias to the linked container’s ip</em> - we can just do <code class="highlighter-rouge">ghost:2846</code> in the nginx container to access ghost.</p>
+
+<h2 id="nginx-config">nginx config</h2>
+<p>In nginx we just have to define a virtual host that will answer on port 80 (possible 443 as well if we need https) and if the requested domain is the one of our blog, then we tell nginx to forward that request to the ghost container. Here is how we do that.</p>
+
+<p><strong>nginx.conf</strong></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>user www-data;
+pid /var/run/nginx.pid;
+worker_processes 1;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+  # Basic Settings
+  sendfile on;
+  tcp_nopush on;
+  tcp_nodelay on;
+  keepalive_timeout 33;
+  types_hash_max_size 2048;
+
+  server_tokens off;
+  server_names_hash_bucket_size 64;
+
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+  # Logging Settings
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
+  # Gzip Settings
+  gzip on;
+  gzip_vary on;
+  gzip_proxied any;
+  gzip_comp_level 3;
+  gzip_buffers 16 8k;
+  gzip_http_version 1.1;
+  gzip_types text/plain text/xml text/css application/x-javascript application/json;
+  gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+
+  include /etc/nginx/conf.d/*.conf;
+}
+</code></pre>
+</div>
+
+<p>** ghost.conf **</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>upstream maddev-web {
+  server maddev:2368;
+}
+
+server {
+  listen 80;
+  server_name maddev.gr www.maddev.gr;
+
+  location / {
+      proxy_pass         http://maddev-web;
+      proxy_http_version 1.1;
+      proxy_redirect     off;
+      proxy_set_header   Host $host;
+      proxy_set_header   Connection 'upgrade';
+      proxy_set_header   Upgrade $http_upgrade;
+      proxy_set_header   X-Real-IP $remote_addr;
+      proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header   X-Forwarded-Host $server_name;
+      proxy_set_header   X-Forwarded-Proto $scheme;
+      proxy_cache_bypass $http_upgrade;
+  }
+}
+</code></pre>
+</div>
+
+<p>and finally <strong>Dockerfile</strong> inside <code class="highlighter-rouge">./proxy</code></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>FROM nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY ghost.conf /etc/nginx/conf.d/ghost.conf
+
+</code></pre>
+</div>
+
+<p>and that’s it. All you have to do now is write <code class="highlighter-rouge">docker compose up -d</code> and everything should be running. You can also do <code class="highlighter-rouge">docker ps</code> to make sure containers are running and the correct ports are used.</p>
+
+          </div>
+
+          <div class="article-share">
+            
+            <a href="" title="Share on Twitter" onclick="window.open('https://twitter.com/home?status=Running Ghost inside docker behind nginx - /posts/running-ghost-inside-docker-behind-nginx by @masimplo', 'newwindow', 'width=500, height=225'); return false;">
+              <span class="icon icon-social-twitter"></span>
+            </a>
+            <a href="" title="Share on Facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=/posts/running-ghost-inside-docker-behind-nginx', 'newwindow', 'width=500, height=500'); return false;">
+              <span class="icon icon-social-facebook"></span>
+            </a>
+            <a href="" title="Share on Google+" onclick="window.open('https://plus.google.com/share?url=/posts/running-ghost-inside-docker-behind-nginx', 'newwindow', 'width=550, height=400'); return false;">
+              <span class="icon icon-social-googleplus"></span>
+            </a>
+          </div>
+
+          
+        </article>
+        <footer class="footer reveal">
+
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Cormorant Garamond:700', 'Lato:300,400,700']
+    }
+  });
+</script>
+
+
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-28844594-2','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+
+
+</body>
+</html>

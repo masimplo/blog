@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>masimplo's blog | Ionic2 VirtualScroll custom component workaround</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Ionic2 VirtualScroll custom component workaround">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/posts/ionic2-virtualscroll-custom-component">
+  <meta property="og:description" content="">
+  <meta property="og:site_name" content="masimplo's blog">
+  <meta property="og:image" content="/assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="/posts/ionic2-virtualscroll-custom-component">
+  <meta name="twitter:title" content="Ionic2 VirtualScroll custom component workaround">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="/assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="/feed.xml" type="application/rss+xml" rel="alternate" title="masimplo's blog Last 10 blog posts" />
+
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="" class="header-logo" title="masimplo's blog">masimplo's blog</a>
+  <ul class="header-links">
+    
+      <li>
+        <a href="https://twitter.com/masimplo" target="_blank" title="Twitter">
+          <span class="icon icon-social-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="https://github.com/masimplo" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="https://www.linkedin.com/in/masimplo" target="_blank" title="LinkedIn">
+          <span class="icon icon-social-linkedin"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="mailto:masimplo@gmail.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>Ionic2 VirtualScroll custom component workaround</h1>
+            <p></p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                October 18, 2016
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  2 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/tag/mobile">mobile</a>
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <p>Simply put virtual scroll is a performance related technique to have a scrollable list of a vast amounts of records that does not impact performance by rendering too many DOM elements. What it does to accomplish that is render just a few items and replace the item contents while scrolling in such a fashion so that the user perceives it as she/he is actually scrolling a large list of items. This has a major impact on performance and is paramount for any app handling large amounts of data to function correctly.</p>
+
+<p>In current version of <a href="http://ionicframework.com">Ionic2</a> (rc1) it is not yet possible to use a custom component as the item to be used by virtual scroll leading to a template that has to be defined in place rather than abstracted away in its own components. There is a currently <a href="https://github.com/driftyco/ionic/issues/6881">open issue</a> for that. Until that issue is resolved there is a quick workaround you can use.</p>
+
+<p>Say we have a list of contacts and each contact is rendered by a component called MyContactListItem we would normally do:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;ion-list [virtualScroll]="contacts"&gt;
+       &lt;my-contact-list-item
+                   *virtualItem="let contact"
+                   [contact]="contact"
+                   (onSelect)="selected($event)"
+                   (onEdit)="updateContact($event)"&gt;
+        &lt;/my-contact-list-item&gt;
+    &lt;/ion-list&gt;
+</code></pre>
+</div>
+
+<p>This will not render anything due to the existing issue. What we can do instead is wrap our custom element in a div element which happens to work with virtualScroll (normally we would use a ion-item but this is going to mess our template at this point).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;ion-list [virtualScroll]="contacts" approxItemHeight="100px"&gt;
+      &lt;div *virtualItem="let contact" class="full-width"&gt;
+       &lt;cv-contact-list-item  [contact]="contact"
+                              (onSelect)="selected($event)"
+                              (onEdit)="updateContact($event)"&gt;
+        &lt;/cv-contact-list-item&gt;
+      &lt;/div&gt;
+    &lt;/ion-list&gt;
+</code></pre>
+</div>
+
+<p>And this will have to do for now.</p>
+
+          </div>
+
+          <div class="article-share">
+            
+            <a href="" title="Share on Twitter" onclick="window.open('https://twitter.com/home?status=Ionic2 VirtualScroll custom component workaround - /posts/ionic2-virtualscroll-custom-component by @masimplo', 'newwindow', 'width=500, height=225'); return false;">
+              <span class="icon icon-social-twitter"></span>
+            </a>
+            <a href="" title="Share on Facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=/posts/ionic2-virtualscroll-custom-component', 'newwindow', 'width=500, height=500'); return false;">
+              <span class="icon icon-social-facebook"></span>
+            </a>
+            <a href="" title="Share on Google+" onclick="window.open('https://plus.google.com/share?url=/posts/ionic2-virtualscroll-custom-component', 'newwindow', 'width=550, height=400'); return false;">
+              <span class="icon icon-social-googleplus"></span>
+            </a>
+          </div>
+
+          
+        </article>
+        <footer class="footer reveal">
+
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Cormorant Garamond:700', 'Lato:300,400,700']
+    }
+  });
+</script>
+
+
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-28844594-2','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>masimplo's blog | Updating Cordova config.xml version using npm version</title>
+  <meta name="description" content="An easy way to bump your cross platform app version using npm version">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Updating Cordova config.xml version using npm version">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/posts/updating-config-xml-version-using-npm-version">
+  <meta property="og:description" content="An easy way to bump your cross platform app version using npm version">
+  <meta property="og:site_name" content="masimplo's blog">
+  <meta property="og:image" content="/assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="/posts/updating-config-xml-version-using-npm-version">
+  <meta name="twitter:title" content="Updating Cordova config.xml version using npm version">
+  <meta name="twitter:description" content="An easy way to bump your cross platform app version using npm version">
+  <meta name="twitter:image" content="/assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="/feed.xml" type="application/rss+xml" rel="alternate" title="masimplo's blog Last 10 blog posts" />
+
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="" class="header-logo" title="masimplo's blog">masimplo's blog</a>
+  <ul class="header-links">
+    
+      <li>
+        <a href="https://twitter.com/masimplo" target="_blank" title="Twitter">
+          <span class="icon icon-social-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="https://github.com/masimplo" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="https://www.linkedin.com/in/masimplo" target="_blank" title="LinkedIn">
+          <span class="icon icon-social-linkedin"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="mailto:masimplo@gmail.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>Updating Cordova config.xml version using npm version</h1>
+            <p>An easy way to bump your cross platform app version using npm version</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                November 2, 2016
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  3 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <p>I like using npm scripts to do all my build and maintenance tasks. They are clear and can be reasoned with. I also like using the tooling built into npm like <code class="highlighter-rouge">npm version</code>. For those that don’t already know you can write something like <code class="highlighter-rouge">npm version 3.5.1</code> and set the package.json version to the semver you passed or even do something like <code class="highlighter-rouge">npm version (major | minor | patch )</code> which will increment the respective version part in package json, commit it and add a git tag as well. For a complete guide of what npm version can do take look <a href="https://docs.npmjs.com/cli/version">here</a>.</p>
+
+<p>I frequently found myself in projects that might have another file, other than package.json, that defines a version field for a specific reason. For instance I am working on an Ionic2 cross platform mobile project that uses Cordova’s config.xml file to set the mobile application version. It makes sense that this version number should match the one in package json. Editing it manually is a hassle, as is oftenly overlooked and because <code class="highlighter-rouge">npm version</code> command commits after changing the version number, changing config.xml by hand would require a separate commit.</p>
+
+<p>First I thought of using a git commit hook which can be accomplished by using the fact that npm version tags the version changing commit, but I don’t like that git hooks are not version controlled and as such cannot be shared within a team and are short of like a hidden artifact that might slip through the cracks.</p>
+
+<p>Reading throught the npm version documentation trying to find ways of extending or hooking onto it, I came upon a, what I think, is an elegant solution. After version 2.13.0 npm offers support for three version related scripts -  <code class="highlighter-rouge">preversion, version and postversion</code>. As the documentation states:</p>
+<blockquote>
+  <p>The exact order of execution is as follows:</p>
+  <ol>
+    <li>Check to make sure the git working directory is clean before we get started. Your scripts may add files to the commit in future steps. This step is skipped if the –force flag is set.</li>
+    <li>Run the preversion script. These scripts have access to the old version in package.json. A typical use would be running your full test suite before deploying. Any files you want added to the commit should be explicitly added using git add.</li>
+    <li>Bump version in package.json as requested (patch, minor, major, etc).</li>
+    <li>Run the version script. These scripts have access to the new version in package.json (so they can incorporate it into file headers in generated files for example). Again, scripts should explicitly add generated files to the commit using git add.</li>
+    <li>Commit and tag.</li>
+    <li>Run the postversion script. Use it to clean up the file system or automatically push the commit and/or tag.</li>
+  </ol>
+</blockquote>
+
+<p>For my specific use case makes sense to use the version script (step 4) which takes place after the new version is available as a variable, but package.json is not committed yet. That way I can edit config.xml and then stage it for commit so it will be committed and tagged alongside package.json. It doesn’t get any better than this.</p>
+
+<p>For npm scripts longer than a line I like to use an external bash script and reference that in the npm script. In my package.json we add:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>"scripts": {
+    ...
+    "version": "./bin/update-config-version.sh",
+    ...
+  }
+</code></pre>
+</div>
+
+<p>and in update-config-version.sh:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">CONFIG</span><span class="o">=</span><span class="s1">'config.xml'</span>
+<span class="nv">NEW_VERSION</span><span class="o">=</span><span class="k">${</span><span class="nv">npm_package_version</span><span class="k">}</span>
+
+<span class="k">if</span> <span class="o">[</span> -e <span class="nv">$CONFIG</span> <span class="o">]</span>; <span class="k">then</span>
+    <span class="c"># sed to replace version in config.xml</span>
+    sed -i <span class="s1">''</span> <span class="s2">"s/</span><span class="se">\(</span><span class="s2">widget.*version=</span><span class="se">\"\)\(</span><span class="s2">[0-9,.]*</span><span class="se">\)\"</span><span class="s2">/</span><span class="se">\1</span><span class="nv">$NEW_VERSION</span><span class="se">\"</span><span class="s2">/"</span> <span class="nv">$CONFIG</span>
+    git add <span class="nv">$CONFIG</span>
+    <span class="nb">echo</span> <span class="s2">"Updated </span><span class="nv">$CONFIG</span><span class="s2"> with version </span><span class="nv">$NEW_VERSION</span><span class="s2">"</span>
+<span class="k">else
+    </span><span class="nb">echo</span> <span class="s1">'Could not find config.xml'</span>
+    <span class="nb">exit </span>1
+<span class="k">fi</span>
+</code></pre>
+</div>
+<p>We first replace the old version with the new one using sed and then stage the edited file.</p>
+
+<p>Note that the new version is available by npm in an environmental variable name <code class="highlighter-rouge">npm_package_version</code> and we are using this variable in our script.</p>
+
+          </div>
+
+          <div class="article-share">
+            
+            <a href="" title="Share on Twitter" onclick="window.open('https://twitter.com/home?status=Updating Cordova config.xml version using npm v... - /posts/updating-config-xml-version-using-npm-version by @masimplo', 'newwindow', 'width=500, height=225'); return false;">
+              <span class="icon icon-social-twitter"></span>
+            </a>
+            <a href="" title="Share on Facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=/posts/updating-config-xml-version-using-npm-version', 'newwindow', 'width=500, height=500'); return false;">
+              <span class="icon icon-social-facebook"></span>
+            </a>
+            <a href="" title="Share on Google+" onclick="window.open('https://plus.google.com/share?url=/posts/updating-config-xml-version-using-npm-version', 'newwindow', 'width=550, height=400'); return false;">
+              <span class="icon icon-social-googleplus"></span>
+            </a>
+          </div>
+
+          
+        </article>
+        <footer class="footer reveal">
+
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Cormorant Garamond:700', 'Lato:300,400,700']
+    }
+  });
+</script>
+
+
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-28844594-2','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+
+
+</body>
+</html>

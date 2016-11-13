@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>masimplo's blog | NVM is hands down the best way to install nodejs</title>
+  <meta name="description" content="Use NVM to manage you nodejs installation and switch between different versions like a boss">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="NVM is hands down the best way to install nodejs">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/posts/nvm-is-hands-down-the-best-way-to-install-nodejs">
+  <meta property="og:description" content="Use NVM to manage you nodejs installation and switch between different versions like a boss">
+  <meta property="og:site_name" content="masimplo's blog">
+  <meta property="og:image" content="/assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="/posts/nvm-is-hands-down-the-best-way-to-install-nodejs">
+  <meta name="twitter:title" content="NVM is hands down the best way to install nodejs">
+  <meta name="twitter:description" content="Use NVM to manage you nodejs installation and switch between different versions like a boss">
+  <meta name="twitter:image" content="/assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link href="/feed.xml" type="application/rss+xml" rel="alternate" title="masimplo's blog Last 10 blog posts" />
+
+  
+    <link type="text/css" rel="stylesheet" href="/assets/light.css">
+  
+</head>
+
+<body>
+  <main role="main">
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav reveal">
+  <a href="" class="header-logo" title="masimplo's blog">masimplo's blog</a>
+  <ul class="header-links">
+    
+      <li>
+        <a href="https://twitter.com/masimplo" target="_blank" title="Twitter">
+          <span class="icon icon-social-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="https://github.com/masimplo" target="_blank" title="GitHub">
+          <span class="icon icon-social-github"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="https://www.linkedin.com/in/masimplo" target="_blank" title="LinkedIn">
+          <span class="icon icon-social-linkedin"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="mailto:masimplo@gmail.com" target="_blank" title="Email">
+          <span class="icon icon-at"></span>
+        </a>
+      </li>
+    
+    
+      <li>
+        <a href="/feed.xml" target="_blank" title="RSS">
+          <span class="icon icon-social-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article reveal">
+          <header class="article-header">
+            <h1>NVM is hands down the best way to install nodejs</h1>
+            <p>Use NVM to manage you nodejs installation and switch between different versions like a boss</p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                November 2, 2016
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  2 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <p>With NodeJS rapidly releasing newer version since the node community got back on its feet, it is now necessary to have an easy way to maintain your <a href="https://node.org">NodeJS</a> installations.</p>
+
+<p>I have tried many different ways to install and maintain Node, distribution packages, binary downloads, building from source and finally using <a href="https://github.com/creationix/nvm">NVM</a>. I know that each method has its advantages and disadvantages, but I now have a favourite.</p>
+
+<p>Nothing beats how easy it is to get to any version of Node using NVM. You can go up, you can go down, heck you can even switch back and forth all the time if that is what you need. Imagine having to run a few hundred tests across major versions of node like most CIs do. Using NVM this is easily done by writing a few lines on a script to switch to the version you need before running each round of tests.</p>
+
+<p>In order to install <a href="https://github.com/creationix/nvm">NVM</a> all you need to do is <code class="highlighter-rouge">curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash</code> and then you can install any version of node simply by writing <code class="highlighter-rouge">nvm install 6.9.1</code>.
+After you install a few versions of node you can switch between them simply by writing <code class="highlighter-rouge">nvm use 4.5.0</code></p>
+
+<p>But what about your global packages? Say you have a global cli package that you need for you build process. You can either install them each time you install a separate node version or you can again take advantage of nvm and just do <code class="highlighter-rouge">nvm install 6.9.1 --reinstall-packages-from=4.5.2</code>
+How is that for easy migration of node versions!?</p>
+
+          </div>
+
+          <div class="article-share">
+            
+            <a href="" title="Share on Twitter" onclick="window.open('https://twitter.com/home?status=NVM is hands down the best way to install nodejs - /posts/nvm-is-hands-down-the-best-way-to-install-nodejs by @masimplo', 'newwindow', 'width=500, height=225'); return false;">
+              <span class="icon icon-social-twitter"></span>
+            </a>
+            <a href="" title="Share on Facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=/posts/nvm-is-hands-down-the-best-way-to-install-nodejs', 'newwindow', 'width=500, height=500'); return false;">
+              <span class="icon icon-social-facebook"></span>
+            </a>
+            <a href="" title="Share on Google+" onclick="window.open('https://plus.google.com/share?url=/posts/nvm-is-hands-down-the-best-way-to-install-nodejs', 'newwindow', 'width=550, height=400'); return false;">
+              <span class="icon icon-social-googleplus"></span>
+            </a>
+          </div>
+
+          
+        </article>
+        <footer class="footer reveal">
+
+</footer>
+
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" src="/assets/vendor.js"></script>
+<script type="text/javascript" src="/assets/application.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Cormorant Garamond:700', 'Lato:300,400,700']
+    }
+  });
+</script>
+
+
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-28844594-2','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+
+
+</body>
+</html>

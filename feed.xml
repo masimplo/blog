@@ -1,20 +1,90 @@
----
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>{{ site.name | xml_escape }}</title>
-    <description>{% if site.description %}{{ site.description | xml_escape }}{% endif %}</description>
-    <link>{{ site.url }}</link>
-    <atom:link href="{{ page.path | absolute_url }}" rel="self" type="application/rss+xml" />
-    {% for post in site.posts limit:10 %}
+    <title>masimplo's blog</title>
+    <description></description>
+    <link></link>
+    <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.description | xml_escape }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | absolute_url }}</link>
-        <guid isPermaLink="true">{{ post.url | absolute_url }}</guid>
+        <title>Updating Cordova config.xml version using npm version</title>
+        <description>An easy way to bump your cross platform app version using npm version</description>
+        <pubDate>Wed, 02 Nov 2016 10:15:04 +0000</pubDate>
+        <link>/posts/updating-config-xml-version-using-npm-version</link>
+        <guid isPermaLink="true">/posts/updating-config-xml-version-using-npm-version</guid>
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>NVM is hands down the best way to install nodejs</title>
+        <description>Use NVM to manage you nodejs installation and switch between different versions like a boss</description>
+        <pubDate>Wed, 02 Nov 2016 10:15:04 +0000</pubDate>
+        <link>/posts/nvm-is-hands-down-the-best-way-to-install-nodejs</link>
+        <guid isPermaLink="true">/posts/nvm-is-hands-down-the-best-way-to-install-nodejs</guid>
+      </item>
+    
+      <item>
+        <title>Removing sensitive data from github</title>
+        <description></description>
+        <pubDate>Fri, 28 Oct 2016 06:12:35 +0000</pubDate>
+        <link>/posts/removing-sensitive-data-from-github</link>
+        <guid isPermaLink="true">/posts/removing-sensitive-data-from-github</guid>
+      </item>
+    
+      <item>
+        <title>Ionic2 VirtualScroll custom component workaround</title>
+        <description></description>
+        <pubDate>Tue, 18 Oct 2016 10:48:37 +0000</pubDate>
+        <link>/posts/ionic2-virtualscroll-custom-component</link>
+        <guid isPermaLink="true">/posts/ionic2-virtualscroll-custom-component</guid>
+      </item>
+    
+      <item>
+        <title>Adding highlight.js to Ghost</title>
+        <description></description>
+        <pubDate>Mon, 17 Oct 2016 19:24:13 +0000</pubDate>
+        <link>/posts/adding-highlight-js-to-ghost-blog</link>
+        <guid isPermaLink="true">/posts/adding-highlight-js-to-ghost-blog</guid>
+      </item>
+    
+      <item>
+        <title>Teamcity agent as Docker container</title>
+        <description></description>
+        <pubDate>Sun, 16 Oct 2016 18:49:00 +0000</pubDate>
+        <link>/posts/teamcity-agent-as-docker-container</link>
+        <guid isPermaLink="true">/posts/teamcity-agent-as-docker-container</guid>
+      </item>
+    
+      <item>
+        <title>Listing global npm installed packages</title>
+        <description></description>
+        <pubDate>Fri, 14 Oct 2016 17:36:00 +0000</pubDate>
+        <link>/posts/listing-global-npm-installed-packages</link>
+        <guid isPermaLink="true">/posts/listing-global-npm-installed-packages</guid>
+      </item>
+    
+      <item>
+        <title>Running Ghost inside docker behind nginx</title>
+        <description></description>
+        <pubDate>Sun, 25 Sep 2016 18:15:00 +0000</pubDate>
+        <link>/posts/running-ghost-inside-docker-behind-nginx</link>
+        <guid isPermaLink="true">/posts/running-ghost-inside-docker-behind-nginx</guid>
+      </item>
+    
+      <item>
+        <title>Welcome to Ghost</title>
+        <description></description>
+        <pubDate>Wed, 21 Sep 2016 17:24:06 +0000</pubDate>
+        <link>/posts/welcome-to-ghost</link>
+        <guid isPermaLink="true">/posts/welcome-to-ghost</guid>
+      </item>
+    
+      <item>
+        <title>Waiting for progress...</title>
+        <description></description>
+        <pubDate>Thu, 22 Nov 2012 02:34:06 +0000</pubDate>
+        <link>/posts/waiting-for-progress</link>
+        <guid isPermaLink="true">/posts/waiting-for-progress</guid>
+      </item>
+    
   </channel>
 </rss>
